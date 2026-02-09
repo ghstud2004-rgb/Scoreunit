@@ -9,42 +9,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet" />
     <script>
-      // Essential shim for process.env and global execution
-      window.process = { env: { API_KEY: "" } };
-      window.global = window;
+      // Force process.env shim before any module loads
+      window.process = { 
+        env: { 
+          NODE_ENV: 'production',
+          API_KEY: '' 
+        } 
+      };
       
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
               vazir: ['Vazirmatn', 'sans-serif'],
-            },
-            colors: {
-              brand: {
-                primary: '#13ec5b',
-                secondary: '#137fec',
-                warning: '#f97316',
-                danger: '#ef4444'
-              }
             }
           }
         }
       }
     </script>
     <style>
-      body { font-family: 'Vazirmatn', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+      body { font-family: 'Vazirmatn', sans-serif; margin: 0; padding: 0; }
       .material-symbols-outlined { vertical-align: middle; }
-      input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        background: #2563eb;
-        cursor: pointer;
-        border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      }
+      @media print { .no-print { display: none !important; } }
     </style>
     <script type="importmap">
 {
@@ -52,15 +38,14 @@
     "react": "https://esm.sh/react@19.0.0",
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "@google/genai": "https://esm.sh/@google/genai@1.40.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "@google/genai": "https://esm.sh/@google/genai@1.4.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
   }
 }
 </script>
   </head>
   <body class="bg-[#f8fafc] text-[#1e293b]">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
