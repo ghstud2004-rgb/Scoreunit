@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import EvaluationForm from './pages/EvaluationForm';
-import Success from './pages/Success';
-import Report from './pages/Report';
-import { User } from './types';
+import Login from './pages/Login.tsx';
+import Dashboard from './pages/Dashboard.tsx';
+import EvaluationForm from './pages/EvaluationForm.tsx';
+import Success from './pages/Success.tsx';
+import Report from './pages/Report.tsx';
+import { User } from './types.ts';
 
 type Page = 'login' | 'dashboard' | 'form' | 'success' | 'report';
 
@@ -14,7 +14,6 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [selectedDeptId, setSelectedDeptId] = useState<string | null>(null);
 
-  // Simple persistence for demo
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {

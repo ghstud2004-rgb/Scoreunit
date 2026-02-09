@@ -7,6 +7,15 @@ interface SuccessProps {
 }
 
 const Success: React.FC<SuccessProps> = ({ onBackToDashboard, onShowReport }) => {
+  // Dynamic Persian Date
+  const currentFullDateTime = new Intl.DateTimeFormat('fa-IR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date());
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 items-center justify-center p-8 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-green-500/5 rounded-full blur-[140px] -z-10 translate-x-1/4 -translate-y-1/4"></div>
@@ -52,7 +61,7 @@ const Success: React.FC<SuccessProps> = ({ onBackToDashboard, onShowReport }) =>
             <span className="text-sm font-medium">شناسه نهایی‌سازی:</span>
             <span className="font-mono text-sm font-bold text-slate-600">FIN-2024-AS98</span>
           </div>
-          <div className="text-sm text-slate-400 font-medium bg-slate-50 px-4 py-1.5 rounded-full">تاریخ ثبت: ۱۴۰۴/۰۸/۲۴ - ۱۱:۴۵</div>
+          <div className="text-sm text-slate-400 font-medium bg-slate-50 px-4 py-1.5 rounded-full">تاریخ ثبت: {currentFullDateTime}</div>
         </div>
       </div>
     </div>
