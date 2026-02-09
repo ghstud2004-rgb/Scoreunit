@@ -1,0 +1,8 @@
+{
+  "name": "Tamin Salamat Performance Platform",
+  "description": "A comprehensive performance evaluation and management system for Tajhiz Gostar Tamin Salamat, featuring dashboards, evaluation forms, and AI-powered reporting.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
