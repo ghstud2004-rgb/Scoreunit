@@ -7,48 +7,43 @@
     <title>Tamin Salamat Performance Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet" />
     <script>
-      // Global shim for process.env
+      // Essential shim for process.env and global execution
       window.process = { env: { API_KEY: "" } };
+      window.global = window;
       
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
-            colors: {
-              primary: {
-                DEFAULT: '#13ec5b',
-                dark: '#0fd351',
-                orange: '#f97316',
-                blue: '#137fec'
-              },
-              brand: {
-                gray: '#71717a',
-                bg: '#f8fafc',
-                surface: '#ffffff'
-              }
-            },
             fontFamily: {
               vazir: ['Vazirmatn', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                primary: '#13ec5b',
+                secondary: '#137fec',
+                warning: '#f97316',
+                danger: '#ef4444'
+              }
             }
           }
         }
       }
     </script>
     <style>
-      body {
-        font-family: 'Vazirmatn', sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        vertical-align: middle;
-      }
-      @media print {
-        .no-print { display: none !important; }
-        .print-container { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      body { font-family: 'Vazirmatn', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+      .material-symbols-outlined { vertical-align: middle; }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #2563eb;
+        cursor: pointer;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
       }
     </style>
     <script type="importmap">
@@ -66,5 +61,6 @@
   </head>
   <body class="bg-[#f8fafc] text-[#1e293b]">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

@@ -12,18 +12,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Dummy login
     onLogin({
       id: '1',
       name: 'خانم علیزاد',
-      role: 'مدیر ارزیابی',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBCqCrwuGW9CsaXzyZieMEE58faz2ubH_2X7Wzk8mx7jIyGoCvNOqK-EFpSlTCNy3FK6XzxGFIEU7jsMz5CiG8LE8-bOSyEvvZv-Ntkqr_716jX-EBOUiLwaxsMZZQQ5pXmQBEdKWzr8TnnFBwruZ6J5PCvHniG9MC_6YtJgtdd8LkbE2XrkA_RbBdw6HzOKfxmO03rW1wDnQLp9s8GEeTz4QKt_b6nEwqjugLTKOM8cWmQ-SOTJz6vvviJVfv0jDy-43DZiGUGyMu0'
+      role: 'مدیر ارزیابی'
     });
   };
 
   return (
     <div className="flex min-h-screen w-full">
-      {/* Left Decoration Panel */}
       <div className="hidden lg:flex w-1/2 relative bg-[#fff7ed] items-center justify-center overflow-hidden">
         <div className="absolute w-[800px] h-[800px] rounded-full bg-orange-100/40 blur-3xl -top-40 -right-40"></div>
         <div className="absolute w-[600px] h-[600px] rounded-full bg-orange-200/20 blur-2xl -bottom-20 -left-20"></div>
@@ -44,7 +41,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
       </div>
 
-      {/* Login Form Panel */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
         <div className="w-full max-w-[400px]">
           <div className="mb-12">
@@ -62,7 +58,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="مثال: admin"
-                  className="w-full rounded-xl border-slate-200 bg-slate-50/50 px-4 py-4 pr-12 text-slate-900 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-4 pr-12 text-slate-900 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
                 />
                 <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">person</span>
               </div>
@@ -77,21 +73,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border-slate-200 bg-slate-50/50 px-4 py-4 pr-12 text-slate-900 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-4 pr-12 text-slate-900 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
                 />
                 <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
-                <button type="button" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                  <span className="material-symbols-outlined">visibility</span>
-                </button>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="rounded text-orange-500 focus:ring-orange-500/20 w-4 h-4 border-slate-300" />
-                <span className="text-sm text-slate-500">مرا به خاطر بسپار</span>
-              </label>
-              <a href="#" className="text-sm font-medium text-orange-500 hover:text-orange-600">فراموشی رمز عبور؟</a>
             </div>
 
             <button 

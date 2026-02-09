@@ -18,37 +18,34 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
 
   const getStatusStyles = (status: EvaluationStatus, days?: number) => {
     if (status === EvaluationStatus.OVERDUE) {
-      return 'bg-red-100 text-red-700 border-red-200';
+      return 'bg-red-50 text-red-600 border-red-100';
     }
     if (days === 1) {
-      return 'bg-orange-100 text-orange-700 border-orange-200';
+      return 'bg-orange-50 text-orange-600 border-orange-100';
     }
-    return 'bg-green-100 text-green-700 border-green-200';
+    return 'bg-green-50 text-green-600 border-green-100';
   };
 
   const getIndicatorColor = (status: EvaluationStatus, days?: number) => {
-    if (status === EvaluationStatus.OVERDUE) return 'bg-red-600';
+    if (status === EvaluationStatus.OVERDUE) return 'bg-red-500';
     if (days === 1) return 'bg-orange-500';
     return 'bg-green-500';
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#f8fafc]">
       <header className="bg-white border-b border-slate-100 h-20 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-50">
         <div className="flex items-center gap-6">
           <div className="border-r-4 border-blue-600 pr-4">
-            <h2 className="text-xl font-bold">خوش آمدید، {user?.name}</h2>
-            <p className="text-xs text-slate-500 mt-1">{user?.role} • پنل ارزیابی</p>
+            <h2 className="text-xl font-black text-slate-800">خوش آمدید، {user?.name}</h2>
+            <p className="text-xs text-slate-500 font-bold">{user?.role} • تجهیز گستر تامین سلامت</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-xl">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-xl border border-blue-100">
             <span className="material-symbols-outlined text-lg">calendar_today</span>
-            <p className="text-sm font-bold">{currentDate}</p>
-          </div>
-          <div className="size-10 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-200">
-            <span className="material-symbols-outlined text-slate-400">person</span>
+            <p className="text-sm font-black">{currentDate}</p>
           </div>
         </div>
       </header>
@@ -57,55 +54,57 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <p className="text-sm text-slate-500 mb-1">واحدهای کل</p>
+              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">واحدهای کل</p>
               <p className="text-3xl font-black text-slate-800">۱۲ واحد</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <p className="text-sm text-slate-500 mb-1">ارزیابی شده</p>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm border-r-4 border-r-green-500">
+              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">ارزیابی شده</p>
               <p className="text-3xl font-black text-green-600">۷</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <p className="text-sm text-slate-500 mb-1">نیاز به اقدام</p>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm border-r-4 border-r-orange-500">
+              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">نیاز به اقدام</p>
               <p className="text-3xl font-black text-orange-500">۴</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <p className="text-sm text-slate-500 mb-1">معوق شده</p>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm border-r-4 border-r-red-500">
+              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">معوق شده</p>
               <p className="text-3xl font-black text-red-600">۱</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-right">
-                <thead className="bg-slate-50 text-slate-500 text-xs font-bold uppercase">
+                <thead className="bg-slate-50/50 text-slate-400 text-xs font-black uppercase tracking-widest">
                   <tr>
-                    <th className="px-10 py-5">واحد ارزیاب شونده</th>
-                    <th className="px-10 py-5">آخرین تاریخ</th>
-                    <th className="px-10 py-5 text-center">وضعیت</th>
-                    <th className="px-10 py-5">عملیات</th>
+                    <th className="px-10 py-6">واحد ارزیاب شونده</th>
+                    <th className="px-10 py-6">آخرین تاریخ ارزیابی</th>
+                    <th className="px-10 py-6 text-center">وضعیت زمانی</th>
+                    <th className="px-10 py-6">عملیات</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-50">
                   {DEPARTMENTS.map((dept) => (
-                    <tr key={dept.id} className="hover:bg-slate-50/50">
-                      <td className="px-10 py-6">
+                    <tr key={dept.id} className="hover:bg-slate-50/30 transition-colors">
+                      <td className="px-10 py-7">
                         <div className="flex items-center gap-3">
-                          <div className={`w-2 h-2 rounded-full ${getIndicatorColor(dept.status, dept.daysRemaining)}`}></div>
-                          <div className="text-sm font-bold">{dept.name}</div>
+                          <div className={`w-2.5 h-2.5 rounded-full ${getIndicatorColor(dept.status, dept.daysRemaining)} shadow-sm`}></div>
+                          <div className="text-sm font-black text-slate-800">{dept.name}</div>
                         </div>
                       </td>
-                      <td className="px-10 py-6 text-sm text-slate-500">{dept.lastEvaluationDate}</td>
-                      <td className="px-10 py-6 text-center">
-                        <span className={`px-4 py-1.5 text-xs font-bold rounded-full border ${getStatusStyles(dept.status, dept.daysRemaining)}`}>
-                          {dept.status === EvaluationStatus.OVERDUE ? 'معوق شده' : `${dept.daysRemaining} روز مانده`}
+                      <td className="px-10 py-7 text-sm font-bold text-slate-500">{dept.lastEvaluationDate}</td>
+                      <td className="px-10 py-7 text-center">
+                        <span className={`px-5 py-2 text-[11px] font-black rounded-full border ${getStatusStyles(dept.status, dept.daysRemaining)}`}>
+                          {dept.status === EvaluationStatus.OVERDUE ? 'معوق شده (بحرانی)' : 
+                           dept.daysRemaining === 1 ? 'فقط ۱ روز باقی مانده' : 
+                           `${dept.daysRemaining} روز تا سررسید`}
                         </span>
                       </td>
-                      <td className="px-10 py-6">
+                      <td className="px-10 py-7">
                         <button 
                           onClick={() => onNavigate('form', dept.id)}
-                          className="text-blue-600 border border-blue-600 font-bold py-1.5 px-4 rounded-lg text-xs hover:bg-blue-600 hover:text-white transition-all"
+                          className="bg-white text-blue-600 border border-blue-200 font-black py-2 px-6 rounded-xl text-xs hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
                         >
-                          ورود به فرم
+                          شروع ارزیابی
                         </button>
                       </td>
                     </tr>
@@ -117,12 +116,12 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
         </div>
       </main>
 
-      <div className="p-10 flex justify-start">
-        <button onClick={onLogout} className="text-red-600 font-bold flex items-center gap-2 hover:bg-red-50 px-4 py-2 rounded-lg transition-all">
+      <footer className="p-10 flex justify-start">
+        <button onClick={onLogout} className="text-red-500 font-black flex items-center gap-2 hover:bg-red-50 px-6 py-3 rounded-2xl transition-all">
           <span className="material-symbols-outlined">logout</span>
-          <span>خروج</span>
+          <span>خروج از حساب</span>
         </button>
-      </div>
+      </footer>
     </div>
   );
 };
