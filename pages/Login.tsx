@@ -15,7 +15,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     onLogin({
       id: '1',
       name: 'خانم علیزاد',
-      role: 'مدیر ارزیابی'
+      role: 'مدیر کارخانه'
     });
   };
 

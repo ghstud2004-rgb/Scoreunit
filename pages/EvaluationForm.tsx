@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { User, Criteria } from '../types';
 import { INITIAL_CRITERIA } from '../constants';
-import { getAIFeedbackSuggestion } from '../services/geminiService';
 
 interface EvaluationFormProps {
   user: User | null;
@@ -14,7 +13,6 @@ interface EvaluationFormProps {
 const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, onSuccess }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [criteria, setCriteria] = useState<Criteria[]>(INITIAL_CRITERIA);
-  const [isSuggesting, setIsSuggesting] = useState(false);
 
   const currentItem = criteria[currentStep];
 
@@ -28,13 +26,6 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
     const updated = [...criteria];
     updated[currentStep].feedback = text;
     setCriteria(updated);
-  };
-
-  const handleSuggestFeedback = async () => {
-    setIsSuggesting(true);
-    const suggestion = await getAIFeedbackSuggestion(currentItem.name, currentItem.score);
-    handleFeedbackChange(suggestion);
-    setIsSuggesting(false);
   };
 
   const handleNext = () => {
@@ -62,7 +53,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
 
         <div className="flex flex-col text-right">
           <span className="text-sm font-black text-slate-800">{user?.name}</span>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Evaluator Agent</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">مدیر کارخانه</span>
         </div>
       </header>
 
@@ -92,9 +83,11 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
           <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100 p-8 sm:p-14 space-y-12">
             <div className="space-y-5">
               <div className="flex items-start justify-between">
-                <div className="space-y-3">
-                  <span className="bg-blue-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-blue-500/20">Key Indicator</span>
-                  <h3 className="text-2xl font-black text-slate-800 leading-tight">{currentItem.name}</h3>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-slate-800 leading-tight">
+                    <span className="text-slate-500 font-bold ml-1">عنوان شاخص :</span>
+                    {currentItem.name}
+                  </h3>
                 </div>
                 <div className="size-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 border border-blue-100 shadow-inner">
                   <span className="material-symbols-outlined text-4xl">analytics</span>
@@ -121,34 +114,26 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
                   onChange={(e) => handleScoreChange(parseInt(e.target.value))}
                   className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">
-                  <span className="text-red-400">Poor (1)</span>
-                  <span className="text-orange-400">Average (5)</span>
-                  <span className="text-green-500">Excellent (10)</span>
+                <div className="flex justify-between mt-6 text-[11px] font-black text-slate-400 px-1">
+                  <span className="text-red-400">(۱) ضعیف</span>
+                  <span className="text-orange-400">(۵) متوسط</span>
+                  <span className="text-green-500">(۱۰) عالی</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-black text-slate-700 flex items-center gap-2">
                   <span className="material-symbols-outlined text-blue-600">rate_review</span>
-                  گزارش توصیفی ارزیاب
+                  گزارش توصیفی ارزیاب (در صورت نیاز)
                 </label>
-                <button 
-                  onClick={handleSuggestFeedback}
-                  disabled={isSuggesting}
-                  className="text-[11px] font-black text-blue-600 bg-white border border-blue-100 px-4 py-2 rounded-xl hover:bg-blue-50 transition-all flex items-center gap-2 shadow-sm"
-                >
-                  <span className="material-symbols-outlined text-sm">{isSuggesting ? 'sync' : 'auto_awesome'}</span>
-                  {isSuggesting ? 'در حال تحلیل...' : 'تولید متن هوشمند (AI)'}
-                </button>
               </div>
               <textarea 
                 rows={4}
                 value={currentItem.feedback}
                 onChange={(e) => handleFeedbackChange(e.target.value)}
-                placeholder="جزئیات عملکرد و شواهد عینی را اینجا وارد کنید..."
+                placeholder="توضیحات تکمیلی یا شواهد عینی عملکرد را در این بخش وارد کنید..."
                 className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50/50 p-6 text-slate-800 font-medium focus:border-blue-500 focus:bg-white transition-all outline-none resize-none shadow-inner"
               ></textarea>
             </div>
