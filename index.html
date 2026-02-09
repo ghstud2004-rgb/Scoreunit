@@ -5,18 +5,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tamin Salamat Performance Platform</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet" />
+    
     <script>
-      // Force process.env shim before any module loads
+      /** 
+       * CRITICAL: Define process.env shim globally 
+       * This prevents "process is not defined" errors in modules.
+       */
       window.process = { 
         env: { 
           NODE_ENV: 'production',
           API_KEY: '' 
         } 
       };
-      
+
       tailwind.config = {
         theme: {
           extend: {
@@ -27,11 +35,18 @@
         }
       }
     </script>
+    
     <style>
-      body { font-family: 'Vazirmatn', sans-serif; margin: 0; padding: 0; }
+      body { 
+        font-family: 'Vazirmatn', sans-serif; 
+        margin: 0; 
+        padding: 0; 
+        background-color: #f8fafc;
+      }
       .material-symbols-outlined { vertical-align: middle; }
       @media print { .no-print { display: none !important; } }
     </style>
+
     <script type="importmap">
 {
   "imports": {
@@ -39,13 +54,14 @@
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.4.0",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
   </head>
-  <body class="bg-[#f8fafc] text-[#1e293b]">
+  <body>
     <div id="root"></div>
+    <!-- The system automatically imports index.tsx as an ES module -->
   </body>
 </html>

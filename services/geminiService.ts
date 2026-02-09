@@ -2,12 +2,14 @@
 import { GoogleGenAI } from "@google/genai";
 
 const getAIClient = () => {
-  const apiKey = process.env.API_KEY || '';
+  // Safe access to process.env
+  const apiKey = (typeof process !== 'undefined' && process.env) ? (process.env.API_KEY || '') : '';
   return new GoogleGenAI({ apiKey });
 };
 
 export const getAIFeedbackSuggestion = async (criteriaName: string, score: number) => {
-  if (!process.env.API_KEY) return "لطفا کلید API را تنظیم کنید.";
+  const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : null;
+  if (!apiKey) return "لطفا کلید API را تنظیم کنید تا پیشنهاد هوشمند فعال شود.";
   
   try {
     const ai = getAIClient();
@@ -21,12 +23,14 @@ export const getAIFeedbackSuggestion = async (criteriaName: string, score: numbe
     return response.text?.trim() || "بدون پیشنهاد";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "خطا در دریافت پیشنهاد هوشمند.";
+    return "خطا در ارتباط با هوش مصنوعی.";
   }
 };
 
 export const summarizeReportWithAI = async (record: any) => {
-  if (!process.env.API_KEY) return null;
+  const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : null;
+  if (!apiKey) return null;
+  
   try {
     const ai = getAIClient();
     const response = await ai.models.generateContent({
@@ -35,6 +39,7 @@ export const summarizeReportWithAI = async (record: any) => {
     });
     return response.text?.trim();
   } catch (error) {
+    console.error("Gemini Summary Error:", error);
     return "تحلیل هوشمند فعلاً در دسترس نیست.";
   }
 };
