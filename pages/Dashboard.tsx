@@ -32,6 +32,12 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
     return 'bg-green-500';
   };
 
+  // Filter departments based on user role
+  const visibleDepartments = DEPARTMENTS.filter(dept => {
+    if (!user) return false;
+    return dept.authorizedRoles.includes(user.role);
+  });
+
   return (
     <div className="flex flex-col min-h-screen bg-[#f8fafc]">
       <header className="bg-white border-b border-slate-100 h-20 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-50">
@@ -54,20 +60,26 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">واحدهای کل</p>
-              <p className="text-3xl font-black text-slate-800">۱۲ واحد</p>
+              <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">لیست ارزیابی‌های من</p>
+              <p className="text-3xl font-black text-slate-800">{visibleDepartments.length} مورد</p>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">ارزیابی شده</p>
-              <p className="text-3xl font-black text-green-600">۷</p>
+              <p className="text-3xl font-black text-green-600">
+                {visibleDepartments.filter(d => d.status === EvaluationStatus.COMPLETED).length}
+              </p>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">نیاز به اقدام</p>
-              <p className="text-3xl font-black text-orange-500">۴</p>
+              <p className="text-3xl font-black text-orange-500">
+                 {visibleDepartments.filter(d => d.status === EvaluationStatus.PENDING).length}
+              </p>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">معوق شده</p>
-              <p className="text-3xl font-black text-red-600">۱</p>
+              <p className="text-3xl font-black text-red-600">
+                {visibleDepartments.filter(d => d.status === EvaluationStatus.OVERDUE).length}
+              </p>
             </div>
           </div>
 
@@ -76,39 +88,54 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onNavigate }) => 
               <table className="w-full text-right">
                 <thead className="bg-slate-50 text-slate-400 text-xs font-black">
                   <tr>
-                    <th className="px-10 py-6">واحد</th>
-                    <th className="px-10 py-6">آخرین بررسی</th>
+                    <th className="px-10 py-6">عنوان فرم ارزیابی</th>
+                    <th className="px-10 py-6">مهلت انجام</th>
                     <th className="px-10 py-6 text-center">وضعیت</th>
                     <th className="px-10 py-6">عملیات</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                  {DEPARTMENTS.map((dept) => (
-                    <tr key={dept.id} className="hover:bg-slate-50/50">
-                      <td className="px-10 py-6">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-2.5 h-2.5 rounded-full ${getIndicatorColor(dept.status, dept.daysRemaining)}`}></div>
-                          <div className="text-sm font-black text-slate-800">{dept.name}</div>
-                        </div>
-                      </td>
-                      <td className="px-10 py-6 text-sm font-bold text-slate-500">{dept.lastEvaluationDate}</td>
-                      <td className="px-10 py-6 text-center">
-                        <span className={`px-4 py-1.5 text-[10px] font-black rounded-full border ${getStatusStyles(dept.status, dept.daysRemaining)}`}>
-                          {dept.status === EvaluationStatus.OVERDUE ? 'معوق شده' : 
-                           dept.daysRemaining === 1 ? '۱ روز مانده' : 
-                           `${dept.daysRemaining} روز مانده`}
-                        </span>
-                      </td>
-                      <td className="px-10 py-6">
-                        <button 
-                          onClick={() => onNavigate('form', dept.id)}
-                          className="bg-blue-600 text-white font-black py-2 px-6 rounded-xl text-xs hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
-                        >
-                          ورود
-                        </button>
+                  {visibleDepartments.length > 0 ? (
+                    visibleDepartments.map((dept) => (
+                      <tr key={dept.id} className="hover:bg-slate-50/50">
+                        <td className="px-10 py-6">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2.5 h-2.5 rounded-full ${getIndicatorColor(dept.status, dept.daysRemaining)}`}></div>
+                            <div className="text-sm font-black text-slate-800">{dept.name}</div>
+                          </div>
+                        </td>
+                        <td className="px-10 py-6 text-sm font-bold text-slate-500">{dept.lastEvaluationDate}</td>
+                        <td className="px-10 py-6 text-center">
+                          {dept.status === EvaluationStatus.COMPLETED ? (
+                            <span className="px-4 py-1.5 text-[10px] font-black rounded-full border bg-slate-100 text-slate-500 border-slate-200">
+                              تکمیل شده
+                            </span>
+                          ) : (
+                            <span className={`px-4 py-1.5 text-[10px] font-black rounded-full border ${getStatusStyles(dept.status, dept.daysRemaining)}`}>
+                              {dept.status === EvaluationStatus.OVERDUE ? 'معوق شده' : 
+                               dept.daysRemaining === 1 ? '۱ روز مانده' : 
+                               `${dept.daysRemaining} روز مانده`}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-10 py-6">
+                          <button 
+                            onClick={() => onNavigate('form', dept.id)}
+                            className="bg-blue-600 text-white font-black py-2 px-6 rounded-xl text-xs hover:bg-blue-700 transition-all shadow-md shadow-blue-200 flex items-center gap-2"
+                          >
+                            <span>شروع ارزیابی</span>
+                            <span className="material-symbols-outlined text-sm">arrow_back</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} className="px-10 py-12 text-center text-slate-400 font-bold">
+                        هیچ فرم ارزیابی برای نقش شما تعریف نشده است.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

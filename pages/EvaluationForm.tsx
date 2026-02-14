@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { User, Criteria } from '../types';
-import { INITIAL_CRITERIA } from '../constants';
+import { User, Criteria, EvaluationTemplate } from '../types';
+import { EVALUATION_TEMPLATES, WAREHOUSE_DATA } from '../constants';
 
 interface EvaluationFormProps {
   user: User | null;
@@ -12,7 +12,16 @@ interface EvaluationFormProps {
 
 const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, onSuccess }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [criteria, setCriteria] = useState<Criteria[]>(INITIAL_CRITERIA);
+  
+  // Load correct template based on Department ID, deep copy to allow editing score/feedback
+  const template: EvaluationTemplate = deptId && EVALUATION_TEMPLATES[deptId] 
+    ? EVALUATION_TEMPLATES[deptId] 
+    : WAREHOUSE_DATA;
+
+  // Initialize state only once with the criteria from template
+  const [criteria, setCriteria] = useState<Criteria[]>(() => {
+    return JSON.parse(JSON.stringify(template.criteria));
+  });
 
   const currentItem = criteria[currentStep];
 
@@ -52,8 +61,8 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
         </div>
 
         <div className="flex flex-col text-right">
-          <span className="text-sm font-black text-slate-800">{user?.name}</span>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">مدیر کارخانه</span>
+          <span className="text-sm font-black text-slate-800">{template.evaluatorName}</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{template.evaluatorRole}</span>
         </div>
       </header>
 
@@ -72,9 +81,9 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-3xl font-black text-slate-900 leading-tight">واحد ارزیابی: <span className="text-blue-600">انبار کارخانه</span></h2>
+            <h2 className="text-3xl font-black text-slate-900 leading-tight">واحد ارزیابی: <span className="text-blue-600">{template.departmentName}</span></h2>
             <div className="flex items-center gap-4 text-slate-400 font-bold">
-              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">person</span><span>احمد سرخیل</span></div>
+              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">person</span><span>{template.evaluateeName} ({template.evaluateeRole})</span></div>
               <span className="size-1 bg-slate-200 rounded-full"></span>
               <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">update</span><span>دوره زمستان ۱۴۰۳</span></div>
             </div>
@@ -84,12 +93,17 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
             <div className="space-y-5">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
+                  {currentItem.category && (
+                    <span className="inline-block bg-orange-50 text-orange-600 px-3 py-1 rounded-lg text-xs font-black mb-2 border border-orange-100">
+                      {currentItem.category}
+                    </span>
+                  )}
                   <h3 className="text-2xl font-black text-slate-800 leading-tight">
                     <span className="text-slate-500 font-bold ml-1">عنوان شاخص :</span>
                     {currentItem.name}
                   </h3>
                 </div>
-                <div className="size-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 border border-blue-100 shadow-inner">
+                <div className="size-16 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 border border-blue-100 shadow-inner shrink-0">
                   <span className="material-symbols-outlined text-4xl">analytics</span>
                 </div>
               </div>
@@ -101,23 +115,24 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
                 <label className="text-xl font-black text-slate-800">امتیاز تخصیص یافته</label>
                 <div className="flex items-baseline gap-2 bg-white px-6 py-3 rounded-2xl shadow-md border border-slate-100">
                   <span className="text-5xl font-black text-blue-600">{currentItem.score}</span>
-                  <span className="text-slate-300 font-black text-xl">/ ۱۰</span>
+                  <span className="text-slate-300 font-black text-xl">/ {currentItem.maxScore}</span>
                 </div>
               </div>
               
               <div className="relative pt-4">
                 <input 
                   type="range" 
-                  min="1" 
-                  max="10" 
+                  min="0" 
+                  max={currentItem.maxScore} 
+                  step="1"
                   value={currentItem.score}
                   onChange={(e) => handleScoreChange(parseInt(e.target.value))}
-                  className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer"
+                  className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-600"
                 />
                 <div className="flex justify-between mt-6 text-[11px] font-black text-slate-400 px-1">
-                  <span className="text-red-400">(۱) ضعیف</span>
-                  <span className="text-orange-400">(۵) متوسط</span>
-                  <span className="text-green-500">(۱۰) عالی</span>
+                  <span className="text-red-400">(۰) ضعیف</span>
+                  <span className="text-orange-400">({Math.round(currentItem.maxScore / 2)}) متوسط</span>
+                  <span className="text-green-500">({currentItem.maxScore}) عالی</span>
                 </div>
               </div>
             </div>
@@ -126,7 +141,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-black text-slate-700 flex items-center gap-2">
                   <span className="material-symbols-outlined text-blue-600">rate_review</span>
-                  گزارش توصیفی ارزیاب (در صورت نیاز)
+                  توضیحات ارزیاب (در صورت نیاز)
                 </label>
               </div>
               <textarea 
