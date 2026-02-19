@@ -18,10 +18,20 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
     ? EVALUATION_TEMPLATES[deptId] 
     : WAREHOUSE_DATA;
 
-  // Initialize state only once with the criteria from template
+  // Initialize state
   const [criteria, setCriteria] = useState<Criteria[]>(() => {
     return JSON.parse(JSON.stringify(template.criteria));
   });
+
+  // Update criteria when deptId changes (to handle navigation between forms without unmounting)
+  React.useEffect(() => {
+    const newTemplate = deptId && EVALUATION_TEMPLATES[deptId] 
+      ? EVALUATION_TEMPLATES[deptId] 
+      : WAREHOUSE_DATA;
+    
+    setCriteria(JSON.parse(JSON.stringify(newTemplate.criteria)));
+    setCurrentStep(0);
+  }, [deptId]);
 
   const currentItem = criteria[currentStep];
 
@@ -50,7 +60,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc]">
+    <form onSubmit={(e) => e.preventDefault()} className="min-h-screen flex flex-col bg-[#f8fafc]">
       <header className="bg-white border-b border-slate-100 h-20 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-50">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-3">
@@ -189,7 +199,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
           </div>
         </div>
       </main>
-    </div>
+    </form>
   );
 };
 
