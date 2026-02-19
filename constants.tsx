@@ -86,6 +86,21 @@ const FINANCIAL_MANAGER_CRITERIA: Criteria[] = [
   { id: 'GC-FIN04', category: 'آموزش و ارتباط', name: 'مدیریت و انگیزش تیم مالی', description: 'نظارت بر عملکرد کارشناسان حسابداری، ارتقای سطح دانش فنی آن‌ها و حفظ نظم و اخلاق حرفه‌ای در واحد مالی.', score: 0, maxScore: 5 },
 ];
 
+// -- Factory Manager Criteria --
+const FACTORY_MANAGER_CRITERIA: Criteria[] = [
+  { id: 'WE-FM01', category: 'انجام کار', name: 'تحقق برنامه کلان تولید (MPS)', description: 'مسئولیت مستقیم در قبال خروجی نهایی کارخانه؛ اطمینان از تولید محصولات طبق بودجه‌بندی سالانه و سفارشات ابلاغی از دفتر مرکزی.', score: 0, maxScore: 10 },
+  { id: 'WE-FM02', category: 'انجام کار', name: 'مدیریت هزینه‌ها و بهای تمام شده', description: 'کنترل هزینه‌های سربار کارخانه، بهینه‌سازی مصرف انرژی و مواد اولیه، و کاهش هزینه‌های غیرضروری جهت حفظ حاشیه سود محصولات.', score: 0, maxScore: 10 },
+  { id: 'WE-FM03', category: 'انجام کار', name: 'شاخص اثربخشی کل تجهیزات (OEE)', description: 'نظارت بر بهره‌وری کل خطوط تولید؛ تحلیل توقفات بزرگ و اطمینان از اینکه ظرفیت‌های بلااستفاده کارخانه به حداقل رسیده است.', score: 0, maxScore: 10 },
+  { id: 'WE-FM04', category: 'انجام کار', name: 'انضباط زنجیره تأمین داخلی', description: 'هماهنگی بین انبار، خرید و تولید؛ اطمینان از اینکه گلوگاه مواد اولیه باعث توقف تولید نمی‌شود (بخصوص در نبود مدیر تولید).', score: 0, maxScore: 10 },
+  { id: 'DS-FM01', category: 'نظم و مهارت', name: 'تضمین انطباق سیستمی و رگولاتوری', description: 'حفظ اعتبار پروانه‌های ساخت و گواهینامه‌های ISO؛ آمادگی دائمی کارخانه برای بازرسی‌های اداره تجهیزات پزشکی (IMED) بدون جریمه یا اخطار.', score: 0, maxScore: 10 },
+  { id: 'DS-FM02', category: 'نظم و مهارت', name: 'نظارت بر ایمنی و بهداشت (HSE)', description: 'مسئولیت نهایی در قبال حوادث ناشی از کار و حفظ سلامت پرسنل؛ اطمینان از رعایت استانداردهای ایمنی در تمامی سطوح کارخانه.', score: 0, maxScore: 5 },
+  { id: 'DS-FM03', category: 'نظم و مهارت', name: 'برنامه‌ریزی استراتژیک منابع', description: 'تخصیص بهینه نیروی انسانی و تجهیزات؛ پیش‌بینی نیازهای آتی کارخانه (ماشین‌آلات یا پرسنل تخصصی) و ارائه طرح توسعه به دفتر مرکزی.', score: 0, maxScore: 5 },
+  { id: 'GC-FM01', category: 'آموزش و ارتباط', name: 'رهبری و فرهنگ سازمانی', description: 'ایجاد انگیزه در پرسنل، مدیریت تعارضات بین واحدها (مثلاً تولید و QC) و حفظ ثبات و آرامش روانی در محیط کارخانه.', score: 0, maxScore: 10 },
+  { id: 'GC-FM02', category: 'آموزش و ارتباط', name: 'گزارش‌دهی استراتژیک به مدیریت ارشد', description: 'ارائه گزارش‌های تحلیلی و شفاف از وضعیت کارخانه به هیئت مدیره؛ تبدیل داده‌های خام تولید به اطلاعات تصمیم‌ساز مدیریتی.', score: 0, maxScore: 10 },
+  { id: 'GC-FM03', category: 'آموزش و ارتباط', name: 'توسعه بدنه کارشناسی و جانشین‌پروری', description: 'شناسایی و ارتقای پرسنل مستعد؛ تلاش برای تربیت مدیران میانی (مانند مدیر تولید آینده) جهت کاهش وابستگی سازمان به شخص.', score: 0, maxScore: 5 },
+  { id: 'GC-FM04', category: 'آموزش و ارتباط', name: 'مدیریت پروژه‌های بهبود (کایزن)', description: 'هدایت پروژه‌های بهبود کیفیت یا کاهش ضایعات در سطح کل کارخانه و تشویق نظام پیشنهادات موثر.', score: 0, maxScore: 5 },
+];
+
 
 // *** 3. FULL PERSONNEL LIST FROM CSV ***
 interface PersonnelMap {
@@ -205,6 +220,8 @@ PERSONNEL_LIST.forEach((record, index) => {
 
   if (record.evaluateeName === 'حمید ارمکان' && record.evaluateeRole === 'مدیر مالی') {
     criteria = FINANCIAL_MANAGER_CRITERIA;
+  } else if (record.evaluateeName === 'معصومه علیزاد' && record.evaluateeRole === 'مدیریت کارخانه') {
+    criteria = FACTORY_MANAGER_CRITERIA;
   } else if (record.evaluateeRole.includes('اپراتور')) {
     criteria = OPERATOR_CRITERIA;
   } else if (record.evaluateeRole.includes('سرشیفت')) {
