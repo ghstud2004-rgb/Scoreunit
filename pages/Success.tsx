@@ -1,12 +1,19 @@
 
 import React from 'react';
+import { EVALUATION_TEMPLATES, WAREHOUSE_DATA } from '../constants';
 
 interface SuccessProps {
+  deptId: string | null;
   onBackToDashboard: () => void;
   onShowReport: () => void;
 }
 
-const Success: React.FC<SuccessProps> = ({ onBackToDashboard, onShowReport }) => {
+const Success: React.FC<SuccessProps> = ({ deptId, onBackToDashboard, onShowReport }) => {
+  // Get template data dynamically based on deptId, fallback to generic if not found
+  const template = deptId && EVALUATION_TEMPLATES[deptId] 
+    ? EVALUATION_TEMPLATES[deptId] 
+    : WAREHOUSE_DATA;
+
   // Dynamic Persian Date
   const currentFullDateTime = new Intl.DateTimeFormat('fa-IR', {
     year: 'numeric',
@@ -33,7 +40,7 @@ const Success: React.FC<SuccessProps> = ({ onBackToDashboard, onShowReport }) =>
           <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">ارزیابی واحد با موفقیت به پایان رسید</h2>
           <div className="max-w-md mx-auto">
             <p className="text-slate-500 text-lg lg:text-xl leading-relaxed">
-              تمامی شاخص‌های ارزیابی برای واحد انبار <span className="block mt-2 text-slate-900 font-black text-2xl">(آقای احمد سرخیل)</span> با موفقیت در سامانه ثبت و نهایی گردید.
+              تمامی شاخص‌های ارزیابی برای واحد {template.departmentName} <span className="block mt-2 text-slate-900 font-black text-2xl">({template.evaluateeName})</span> با موفقیت در سامانه ثبت و نهایی گردید.
             </p>
           </div>
         </div>
@@ -59,7 +66,7 @@ const Success: React.FC<SuccessProps> = ({ onBackToDashboard, onShowReport }) =>
           <div className="flex items-center gap-2.5 text-slate-400">
             <span className="material-symbols-outlined text-lg">fingerprint</span>
             <span className="text-sm font-medium">شناسه نهایی‌سازی:</span>
-            <span className="font-mono text-sm font-bold text-slate-600">FIN-2024-AS98</span>
+            <span className="font-mono text-sm font-bold text-slate-600">FIN-2024-{deptId?.split('-')[1] || 'GEN'}</span>
           </div>
           <div className="text-sm text-slate-400 font-medium bg-slate-50 px-4 py-1.5 rounded-full">تاریخ ثبت: {currentFullDateTime}</div>
         </div>

@@ -26,15 +26,15 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
   const currentItem = criteria[currentStep];
 
   const handleScoreChange = (score: number) => {
-    const updated = [...criteria];
-    updated[currentStep].score = score;
-    setCriteria(updated);
+    setCriteria(prev => prev.map((item, idx) => 
+      idx === currentStep ? { ...item, score } : item
+    ));
   };
 
   const handleFeedbackChange = (text: string) => {
-    const updated = [...criteria];
-    updated[currentStep].feedback = text;
-    setCriteria(updated);
+    setCriteria(prev => prev.map((item, idx) => 
+      idx === currentStep ? { ...item, feedback: text } : item
+    ));
   };
 
   const handleNext = () => {
@@ -70,7 +70,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
         <div className="w-full max-w-3xl space-y-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <nav className="flex items-center text-sm font-black text-slate-400">
-              <button onClick={onBack} className="hover:text-blue-600 transition-colors">داشبورد</button>
+              <button type="button" onClick={onBack} className="hover:text-blue-600 transition-colors">داشبورد</button>
               <span className="mx-3 text-slate-200">/</span>
               <span className="text-slate-800">ارزیابی عملکرد</span>
             </nav>
@@ -156,6 +156,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
             <div className="pt-10 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
               {currentStep === criteria.length - 1 ? (
                 <button 
+                  type="button"
                   onClick={onSuccess}
                   className="flex-1 bg-slate-900 hover:bg-black text-white text-lg font-black py-5 px-10 rounded-2xl shadow-xl shadow-slate-900/20 transition-all flex items-center justify-center gap-3"
                 >
@@ -164,6 +165,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
                 </button>
               ) : (
                 <button 
+                  type="button"
                   onClick={handleNext}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black py-5 px-10 rounded-2xl shadow-xl shadow-blue-600/20 transition-all flex items-center justify-center gap-3"
                 >
@@ -174,6 +176,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
               
               <div className="flex gap-3">
                 <button 
+                  type="button"
                   onClick={handlePrev}
                   disabled={currentStep === 0}
                   className="px-8 py-5 rounded-2xl bg-white border border-slate-200 text-slate-800 font-black hover:bg-slate-50 transition-all disabled:opacity-20 flex items-center gap-2 shadow-sm"

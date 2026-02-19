@@ -46,11 +46,11 @@ const App: React.FC = () => {
       case 'dashboard':
         return <Dashboard user={user} onLogout={handleLogout} onNavigate={navigateTo} />;
       case 'form':
-        return <EvaluationForm user={user} deptId={selectedDeptId} onBack={() => navigateTo('dashboard')} onSuccess={() => navigateTo('success')} />;
+        return <EvaluationForm key={selectedDeptId} user={user} deptId={selectedDeptId} onBack={() => navigateTo('dashboard')} onSuccess={() => navigateTo('success')} />;
       case 'success':
-        return <Success onBackToDashboard={() => navigateTo('dashboard')} onShowReport={() => navigateTo('report')} />;
+        return <Success deptId={selectedDeptId} onBackToDashboard={() => navigateTo('dashboard')} onShowReport={() => navigateTo('report')} />;
       case 'report':
-        return <Report onBack={() => navigateTo('dashboard')} />;
+        return <Report deptId={selectedDeptId} onBack={() => navigateTo('dashboard')} />;
       default:
         return <Login onLogin={handleLogin} />;
     }

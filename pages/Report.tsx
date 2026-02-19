@@ -1,15 +1,18 @@
 
 import React, { useEffect, useState } from 'react';
-import { MOCK_REPORT } from '../constants.tsx';
+import { MOCK_REPORT, EVALUATION_TEMPLATES } from '../constants.tsx';
 import { summarizeReportWithAI } from '../services/geminiService.ts';
+import { EvaluationRecord } from '../types.ts';
 
 interface ReportProps {
+  deptId: string | null;
   onBack: () => void;
 }
 
-const Report: React.FC<ReportProps> = ({ onBack }) => {
+const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
   const [aiSummary, setAiSummary] = useState<string | null>(null);
-  
+  const [reportData, setReportData] = useState<EvaluationRecord>(MOCK_REPORT);
+
   const today = new Intl.DateTimeFormat('fa-IR', {
     year: 'numeric',
     month: '2-digit',
@@ -17,17 +20,54 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
   }).format(new Date());
 
   useEffect(() => {
-    // In a real application, data would be fetched based on an ID.
+    // Generate Report Data dynamically based on the Department ID
+    // In a real app, this would be fetched from backend/context.
+    // Here we construct it from the template to ensure names are correct.
+    if (deptId && EVALUATION_TEMPLATES[deptId]) {
+        const template = EVALUATION_TEMPLATES[deptId];
+        
+        // Simulate score calculation for display purposes
+        // We use random high scores to simulate a completed "Good" evaluation
+        const simulatedCriteria = template.criteria.map(c => ({
+            ...c,
+            score: c.maxScore - (Math.random() > 0.7 ? 1 : 0) // Mostly max scores
+        }));
+
+        const totalScore = simulatedCriteria.reduce((acc, c) => acc + c.score, 0);
+        const maxTotalScore = simulatedCriteria.reduce((acc, c) => acc + c.maxScore, 0);
+        const percentage = Math.round((totalScore / maxTotalScore) * 100);
+
+        setReportData({
+            id: `TZ-${deptId.split('-')[1] || '999'}-1403`,
+            personName: template.evaluateeName,
+            departmentName: template.departmentName,
+            evaluatorName: template.evaluatorName,
+            date: today,
+            criteria: simulatedCriteria,
+            totalScore: totalScore,
+            maxTotalScore: maxTotalScore,
+            achievementPercentage: percentage,
+            level: percentage > 90 ? 'عالی' : (percentage > 75 ? 'خیلی خوب' : 'خوب')
+        });
+    }
+  }, [deptId, today]);
+
+  useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const summary = await summarizeReportWithAI(MOCK_REPORT);
-        setAiSummary(summary || "در حال پردازش داده‌ها و تحلیل هوشمند عملکرد...");
+        setAiSummary("در حال پردازش داده‌ها و تحلیل هوشمند عملکرد...");
+        const summary = await summarizeReportWithAI(reportData);
+        setAiSummary(summary || "تحلیل هوشمند انجام شد.");
       } catch (e) {
         setAiSummary("امکان تحلیل هوشمند در حال حاضر وجود ندارد.");
       }
     };
-    fetchSummary();
-  }, []);
+    
+    // Debounce slightly to ensure reportData is set
+    if (reportData) {
+        fetchSummary();
+    }
+  }, [reportData]);
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 lg:p-12 font-vazir print:bg-white print:p-0">
@@ -70,7 +110,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
                     <div className="text-xs text-slate-300 mb-1">تاریخ صدور</div>
                     <div className="text-xl font-black font-mono">{today}</div>
                     <div className="mt-4 text-xs text-slate-300 mb-1">شماره پرونده</div>
-                    <div className="text-lg font-bold font-mono tracking-wider">{MOCK_REPORT.id}</div>
+                    <div className="text-lg font-bold font-mono tracking-wider">{reportData.id}</div>
                 </div>
             </div>
         </div>
@@ -84,7 +124,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
                     </div>
                     <div>
                         <div className="text-xs text-slate-400 font-bold mb-0.5">نام و نام خانوادگی</div>
-                        <div className="text-lg font-black text-slate-800">{MOCK_REPORT.personName}</div>
+                        <div className="text-lg font-black text-slate-800">{reportData.personName}</div>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -93,7 +133,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
                     </div>
                     <div>
                         <div className="text-xs text-slate-400 font-bold mb-0.5">واحد سازمانی</div>
-                        <div className="text-lg font-black text-slate-800">{MOCK_REPORT.departmentName}</div>
+                        <div className="text-lg font-black text-slate-800">{reportData.departmentName}</div>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -102,7 +142,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
                     </div>
                     <div>
                         <div className="text-xs text-slate-400 font-bold mb-0.5">ارزیاب</div>
-                        <div className="text-lg font-black text-slate-800">{MOCK_REPORT.evaluatorName}</div>
+                        <div className="text-lg font-black text-slate-800">{reportData.evaluatorName}</div>
                     </div>
                 </div>
             </div>
@@ -110,15 +150,15 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
             {/* Scores Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 print:grid-cols-3 print:gap-4 print:mb-8">
                 <div className="bg-blue-50 rounded-3xl p-6 border border-blue-100 flex flex-col items-center justify-center text-center print:border-slate-200 print:bg-white print:border-2">
-                    <span className="text-blue-600 font-black text-5xl mb-2 print:text-slate-900">{MOCK_REPORT.totalScore}</span>
+                    <span className="text-blue-600 font-black text-5xl mb-2 print:text-slate-900">{reportData.totalScore}</span>
                     <span className="text-blue-400 font-bold text-sm print:text-slate-500">مجموع امتیازات</span>
                 </div>
                 <div className="bg-orange-50 rounded-3xl p-6 border border-orange-100 flex flex-col items-center justify-center text-center print:border-slate-200 print:bg-white print:border-2">
-                    <span className="text-orange-500 font-black text-5xl mb-2 print:text-slate-900">%{MOCK_REPORT.achievementPercentage}</span>
+                    <span className="text-orange-500 font-black text-5xl mb-2 print:text-slate-900">%{reportData.achievementPercentage}</span>
                     <span className="text-orange-400 font-bold text-sm print:text-slate-500">درصد تحقق اهداف</span>
                 </div>
                 <div className="bg-green-50 rounded-3xl p-6 border border-green-100 flex flex-col items-center justify-center text-center print:border-slate-200 print:bg-white print:border-2">
-                    <span className="text-green-600 font-black text-3xl mb-4 mt-2 print:text-slate-900">{MOCK_REPORT.level}</span>
+                    <span className="text-green-600 font-black text-3xl mb-4 mt-2 print:text-slate-900">{reportData.level}</span>
                     <span className="text-green-500 font-bold text-sm print:text-slate-500">سطح عملکرد</span>
                 </div>
             </div>
@@ -144,7 +184,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 print:grid-cols-2 print:gap-x-8 print:gap-y-6">
-                {MOCK_REPORT.criteria.map((item, idx) => (
+                {reportData.criteria.map((item, idx) => (
                     <div key={item.id} className="group break-inside-avoid">
                         <div className="flex justify-between items-baseline mb-3">
                             <h4 className="font-bold text-slate-700 text-sm pl-2 flex items-center gap-2 print:text-slate-900">
@@ -181,7 +221,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
                         {/* Placeholder for Signature */}
                     </div>
                     <div className="font-bold text-slate-800">امضاء ارزیاب</div>
-                    <div className="text-xs text-slate-400 mt-1">{MOCK_REPORT.evaluatorName}</div>
+                    <div className="text-xs text-slate-400 mt-1">{reportData.evaluatorName}</div>
                 </div>
                 <div>
                     <div className="h-20 mb-4 flex items-center justify-center">
@@ -193,7 +233,7 @@ const Report: React.FC<ReportProps> = ({ onBack }) => {
             </div>
             
             <div className="mt-12 text-center text-[10px] text-slate-300 font-mono print:text-slate-400">
-                System Generated Report • ID: {MOCK_REPORT.id} • {new Date().toISOString().split('T')[0]}
+                System Generated Report • ID: {reportData.id} • {new Date().toISOString().split('T')[0]}
             </div>
 
         </div>

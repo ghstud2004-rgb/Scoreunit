@@ -71,6 +71,21 @@ const WAREHOUSE_ASSISTANT_CRITERIA: Criteria[] = [
   { id: 'GC-W04', category: 'آموزش و ارتباط', name: 'مسئولیت‌پذیری و امانت', description: 'حفظ و حراست از اموال انبار و صداقت در گزارش حوادث یا اشتباهات احتمالی در حین جابجایی بار.', score: 0, maxScore: 5 },
 ];
 
+// -- Financial Manager Criteria --
+const FINANCIAL_MANAGER_CRITERIA: Criteria[] = [
+  { id: 'WE-FIN01', category: 'انجام کار', name: 'مدیریت جریان نقدینگی (Cash Flow)', description: 'برنامه‌ریزی و پیش‌بینی دقیق منابع نقد جهت پرداخت به‌موقع حقوق، خرید مواد اولیه و اقساط بانکی؛ جلوگیری از رسوب نقدینگی یا کمبود ناگهانی.', score: 0, maxScore: 15 },
+  { id: 'WE-FIN02', category: 'انجام کار', name: 'تحلیل بهای تمام شده (Costing)', description: 'محاسبه دقیق و به‌روز بهای تمام شده محصولات (نخ بخیه، گایدوایر و...) و تحلیل انحرافات مصرف مواد نسبت به استانداردهای تعریف شده تولید.', score: 0, maxScore: 15 },
+  { id: 'WE-FIN03', category: 'انجام کار', name: 'صحت و سرعت گزارش‌گری مالی', description: 'تهیه و ارائه ترازنامه، صورت سود و زیان و گزارش‌های مدیریتی دقیق و بدون خطا در موعد مقرر (ماهانه/فصلی) جهت تصمیم‌گیری هیئت مدیره.', score: 0, maxScore: 10 },
+  { id: 'WE-FIN04', category: 'انجام کار', name: 'مدیریت بودجه و تحلیل انحرافات', description: 'تدوین بودجه جامع سالانه و کنترل مستمر هزینه‌ها؛ شناسایی بخش‌هایی که بیش از بودجه مصوب هزینه کرده‌اند و ارائه هشدار به مدیریت ارشد.', score: 0, maxScore: 10 },
+  { id: 'DS-FIN01', category: 'نظم و مهارت', name: 'انطباق با قوانین مالیاتی و بیمه', description: 'ارسال دقیق و به‌موقع اظهارنامه‌های ارزش افزوده، عملکرد، لیست بیمه و مالیات حقوق جهت جلوگیری از هرگونه جریمه یا مسدودی حساب.', score: 0, maxScore: 10 },
+  { id: 'DS-FIN02', category: 'نظم و مهارت', name: 'استقرار و پایش کنترلهای داخلی', description: 'تعریف و نظارت بر فرآیندهای مالی (مثل تنخواه‌گردان، انبارگردانی و پرداختی‌ها) جهت پیشگیری از خطا، سوءاستفاده یا تضییع حقوق شرکت.', score: 0, maxScore: 10 },
+  { id: 'DS-FIN03', category: 'نظم و مهارت', name: 'مدیریت دارایی‌ها و موجودی انبار', description: 'نظارت بر صحت ثبت ادواری دارایی‌های ثابت و مطابقت ریالی موجودی انبار با موجودی فیزیکی (جلوگیری از مغایرت انبار).', score: 0, maxScore: 5 },
+  { id: 'GC-FIN01', category: 'آموزش و ارتباط', name: 'مشاوره مالی و استراتژیک به مدیریت', description: 'ارائه راهکارهای مالی برای کاهش مالیات، افزایش سودآوری و تحلیل نقاط سربه‌سر تولید برای محصولات جدید کارخانه.', score: 0, maxScore: 10 },
+  { id: 'GC-FIN02', category: 'آموزش و ارتباط', name: 'تعامل با بانک‌ها و نهادهای خارجی', description: 'مدیریت روابط با بانک‌ها جهت اخذ تسهیلات، ضمانت‌نامه‌ها و همچنین تعامل حرفه‌ای با ممیزین مالیاتی و حسابرسان مستقل.', score: 0, maxScore: 5 },
+  { id: 'GC-FIN03', category: 'آموزش و ارتباط', name: 'توسعه دانش مالی در سازمان', description: 'آموزش مفاهیم مالی پایه به سایر مدیران (مثل مدیر کارخانه یا فروش) جهت درک بهتر هزینه‌ها و همسویی با اهداف مالی شرکت.', score: 0, maxScore: 5 },
+  { id: 'GC-FIN04', category: 'آموزش و ارتباط', name: 'مدیریت و انگیزش تیم مالی', description: 'نظارت بر عملکرد کارشناسان حسابداری، ارتقای سطح دانش فنی آن‌ها و حفظ نظم و اخلاق حرفه‌ای در واحد مالی.', score: 0, maxScore: 5 },
+];
+
 
 // *** 3. FULL PERSONNEL LIST FROM CSV ***
 interface PersonnelMap {
@@ -188,7 +203,9 @@ PERSONNEL_LIST.forEach((record, index) => {
   // Determine Criteria based on Evaluatee Role
   let criteria = GENERIC_CRITERIA;
 
-  if (record.evaluateeRole.includes('اپراتور')) {
+  if (record.evaluateeName === 'حمید ارمکان' && record.evaluateeRole === 'مدیر مالی') {
+    criteria = FINANCIAL_MANAGER_CRITERIA;
+  } else if (record.evaluateeRole.includes('اپراتور')) {
     criteria = OPERATOR_CRITERIA;
   } else if (record.evaluateeRole.includes('سرشیفت')) {
     criteria = SHIFT_SUPERVISOR_CRITERIA;
@@ -227,7 +244,7 @@ export const EVALUATION_TEMPLATES: Record<string, EvaluationTemplate> = generate
 
 // Exports for compatibility (can be removed later if not used directly)
 export const INITIAL_CRITERIA = GENERIC_CRITERIA;
-export const FINANCIAL_CRITERIA = GENERIC_CRITERIA;
+export const FINANCIAL_CRITERIA = FINANCIAL_MANAGER_CRITERIA;
 
 export const WAREHOUSE_DATA: EvaluationTemplate = {
   departmentId: 'warehouse-mock',
