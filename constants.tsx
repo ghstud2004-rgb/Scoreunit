@@ -101,6 +101,20 @@ const FACTORY_MANAGER_CRITERIA: Criteria[] = [
   { id: 'GC-FM04', category: 'آموزش و ارتباط', name: 'مدیریت پروژه‌های بهبود (کایزن)', description: 'هدایت پروژه‌های بهبود کیفیت یا کاهش ضایعات در سطح کل کارخانه و تشویق نظام پیشنهادات موثر.', score: 0, maxScore: 5 },
 ];
 
+// -- QA Manager Criteria --
+const QA_MANAGER_CRITERIA: Criteria[] = [
+  { id: 'WE-QAM01', category: 'انجام کار', name: 'اثربخشی سیستم مدیریت کیفیت (QMS)', description: 'نظارت بر اجرای دقیق فرآیندهای ISO 13485؛ کاهش تعداد عدم انطباق‌های (NC) شناسایی شده در ممیزی‌های داخلی و خارجی.', score: 0, maxScore: 10 },
+  { id: 'WE-QAM02', category: 'انجام کار', name: 'مدیریت فرآیند CAPA', description: 'سرعت و کیفیت در اجرای اقدامات اصلاحی و پیشگیرانه؛ اطمینان از اینکه علل ریشه‌ای خطاها شناسایی و برای همیشه حذف شده‌اند.', score: 0, maxScore: 10 },
+  { id: 'WE-QAM03', category: 'انجام کار', name: 'نظارت بر آزادسازی دسته‌های تولید (Release)', description: 'بررسی نهایی Batch Recordها و اطمینان از انطباق کامل فرآیند تولید و استریل با پروتکل‌ها قبل از صدور مجوز خروج محصول از انبار.', score: 0, maxScore: 10 },
+  { id: 'WE-QAM04', category: 'انجام کار', name: 'مدیریت ممیزی تأمین‌کنندگان', description: 'ارزیابی دوره‌ای و فنی تأمین‌کنندگان مواد اولیه جهت اطمینان از تداوم کیفیت ورودی به کارخانه.', score: 0, maxScore: 5 },
+  { id: 'DS-QAM01', category: 'نظم و مهارت', name: 'مدیریت ریسک (ISO 14971)', description: 'پیاده‌سازی و به‌روزرسانی مستمر فایل‌های مدیریت ریسک محصول؛ پیش‌بینی خطرات احتمالی برای بیمار و ارائه راهکارهای کنترلی.', score: 0, maxScore: 10 },
+  { id: 'DS-QAM02', category: 'نظم و مهارت', name: 'صحه‌گذاری فرآیندها (Validation)', description: 'نظارت بر اجرای صحیح پروتکل‌های IQ/OQ/PQ برای تجهیزات تولید، استریل و هواسازها و اطمینان از معتبر بودن نتایج فرآیندهای ویژه.', score: 0, maxScore: 10 },
+  { id: 'DS-QAM03', category: 'نظم و مهارت', name: 'کنترل مستندات و تغییرات (Change Control)', description: 'مدیریت دقیق تغییرات در نقشه محصولات، فرمولاسیون یا فرآیندها؛ اطمینان از اینکه هیچ تغییری بدون تحلیل ریسک و تأیید فنی انجام نمی‌شود.', score: 0, maxScore: 10 },
+  { id: 'GC-QAM01', category: 'آموزش و ارتباط', name: 'تعامل با نهادهای قانونی (IMED)', description: 'پیگیری و تمدید پروانه‌های ساخت و کدهای IRC؛ پاسخگویی حرفه‌ای به بازرسان اداره کل تجهیزات پزشکی و رفع یافته‌های بازرسی.', score: 0, maxScore: 10 },
+  { id: 'GC-QAM02', category: 'آموزش و ارتباط', name: 'ترویج فرهنگ کیفیت در سازمان', description: 'برگزاری دوره‌های آموزشی مفاهیم GMP و ISO برای تمامی سطوح سازمان؛ تبدیل "کیفیت" به یک باور عمومی در بین پرسنل.', score: 0, maxScore: 5 },
+  { id: 'GC-QAM03', category: 'آموزش و ارتباط', name: 'پایش شاخص‌های رضایت مشتری', description: 'تحلیل داده‌های مربوط به شکایات یا نظرسنجی‌ها و تبدیل آن‌ها به پروژه‌های بهبود برای ارتقای سطح کیفی محصولات.', score: 0, maxScore: 5 },
+];
+
 
 // *** 3. FULL PERSONNEL LIST FROM CSV ***
 interface PersonnelMap {
@@ -222,6 +236,8 @@ PERSONNEL_LIST.forEach((record, index) => {
     criteria = FINANCIAL_MANAGER_CRITERIA;
   } else if (record.evaluateeName === 'معصومه علیزاد' && record.evaluateeRole === 'مدیریت کارخانه') {
     criteria = FACTORY_MANAGER_CRITERIA;
+  } else if (record.evaluateeName === 'ساره پورابراهیمی' && record.evaluateeRole === 'مدیر تضمین کیفیت') {
+    criteria = QA_MANAGER_CRITERIA;
   } else if (record.evaluateeRole.includes('اپراتور')) {
     criteria = OPERATOR_CRITERIA;
   } else if (record.evaluateeRole.includes('سرشیفت')) {
