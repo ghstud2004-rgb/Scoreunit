@@ -95,7 +95,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
             <div className="flex items-center gap-4 text-slate-400 font-bold">
               <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">person</span><span>{template.evaluateeName} ({template.evaluateeRole})</span></div>
               <span className="size-1 bg-slate-200 rounded-full"></span>
-              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">update</span><span>دوره زمستان ۱۴۰۳</span></div>
+              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">update</span><span>دوره اسفند ۱۴۰۳</span></div>
             </div>
           </div>
 

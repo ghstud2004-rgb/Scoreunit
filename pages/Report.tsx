@@ -104,7 +104,7 @@ const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
                         <h2 className="text-lg font-bold tracking-wide">تجهیز گستر تامین سلامت</h2>
                     </div>
                     <h1 className="text-3xl lg:text-4xl font-black leading-tight">کارنامه ارزیابی عملکرد</h1>
-                    <p className="mt-2 text-slate-300 font-medium print:text-slate-300">دوره: زمستان ۱۴۰۳</p>
+                    <p className="mt-2 text-slate-300 font-medium print:text-slate-300">دوره: اسفند ۱۴۰۳</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 min-w-[200px] print:border-white">
                     <div className="text-xs text-slate-300 mb-1">تاریخ صدور</div>
