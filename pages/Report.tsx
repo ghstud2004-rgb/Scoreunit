@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { MOCK_REPORT, EVALUATION_TEMPLATES } from '../constants.tsx';
-import { summarizeReportWithAI } from '../services/geminiService.ts';
 import { EvaluationRecord } from '../types.ts';
 
 interface ReportProps {
@@ -10,7 +9,6 @@ interface ReportProps {
 }
 
 const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
-  const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [reportData, setReportData] = useState<EvaluationRecord>(MOCK_REPORT);
 
   const today = new Intl.DateTimeFormat('fa-IR', {
@@ -52,23 +50,6 @@ const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
     }
   }, [deptId, today]);
 
-  useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        setAiSummary("در حال پردازش داده‌ها و تحلیل هوشمند عملکرد...");
-        const summary = await summarizeReportWithAI(reportData);
-        setAiSummary(summary || "تحلیل هوشمند انجام شد.");
-      } catch (e) {
-        setAiSummary("امکان تحلیل هوشمند در حال حاضر وجود ندارد.");
-      }
-    };
-    
-    // Debounce slightly to ensure reportData is set
-    if (reportData) {
-        fetchSummary();
-    }
-  }, [reportData]);
-
   return (
     <div className="min-h-screen bg-slate-50 p-6 lg:p-12 font-vazir print:bg-white print:p-0">
       {/* Action Bar (Hidden in Print) */}
@@ -104,7 +85,7 @@ const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
                         <h2 className="text-lg font-bold tracking-wide">تجهیز گستر تامین سلامت</h2>
                     </div>
                     <h1 className="text-3xl lg:text-4xl font-black leading-tight">کارنامه ارزیابی عملکرد</h1>
-                    <p className="mt-2 text-slate-300 font-medium print:text-slate-300">دوره: اسفند ۱۴۰۳</p>
+                    <p className="mt-2 text-slate-300 font-medium print:text-slate-300">دوره: خرداد ۱۴۰۵</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 min-w-[200px] print:border-white">
                     <div className="text-xs text-slate-300 mb-1">تاریخ صدور</div>
@@ -160,20 +141,6 @@ const Report: React.FC<ReportProps> = ({ deptId, onBack }) => {
                 <div className="bg-green-50 rounded-3xl p-6 border border-green-100 flex flex-col items-center justify-center text-center print:border-slate-200 print:bg-white print:border-2">
                     <span className="text-green-600 font-black text-3xl mb-4 mt-2 print:text-slate-900">{reportData.level}</span>
                     <span className="text-green-500 font-bold text-sm print:text-slate-500">سطح عملکرد</span>
-                </div>
-            </div>
-
-            {/* AI Insight */}
-            <div className="bg-gradient-to-r from-slate-50 to-white rounded-3xl p-8 border border-slate-200 mb-12 relative overflow-hidden print:border print:border-slate-200 print:bg-white print:p-6 print:mb-8">
-                <div className="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-blue-500 to-purple-500 print:bg-slate-800"></div>
-                <div className="flex items-start gap-4">
-                    <span className="material-symbols-outlined text-blue-600 text-3xl mt-1 print:text-slate-800">auto_awesome</span>
-                    <div className="space-y-2">
-                        <h3 className="font-black text-slate-800 text-lg">تحلیل هوشمند عملکرد</h3>
-                        <p className="text-slate-600 leading-loose text-justify pl-4 print:text-slate-800">
-                            {aiSummary || "در حال بارگذاری تحلیل..."}
-                        </p>
-                    </div>
                 </div>
             </div>
 

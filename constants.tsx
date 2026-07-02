@@ -226,6 +226,11 @@ const generateId = (idx: number) => `p-${idx + 1000}`;
 const generatedDepartments: Department[] = [];
 const generatedTemplates: Record<string, EvaluationTemplate> = {};
 
+const deadlineDate = new Date('2026-06-21T23:59:59'); // 1405/03/31
+const today = new Date();
+const diffTime = deadlineDate.getTime() - today.getTime();
+const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
 PERSONNEL_LIST.forEach((record, index) => {
   const pId = generateId(index);
   
@@ -251,12 +256,15 @@ PERSONNEL_LIST.forEach((record, index) => {
   // We removed 'مدیرعامل' from the default list to prevent blanket access.
   const authorizedRoles = [record.evaluatorRole];
   
+  const isCompleted = Math.random() > 0.7;
+  const status = isCompleted ? EvaluationStatus.COMPLETED : (diffDays < 0 ? EvaluationStatus.OVERDUE : EvaluationStatus.PENDING);
+  
   generatedDepartments.push({
     id: pId,
     name: `ارزیابی ${record.evaluateeName}`,
-    lastEvaluationDate: '۱۴۰۳/۱۲/۰۱', // Current period
-    status: Math.random() > 0.7 ? EvaluationStatus.COMPLETED : EvaluationStatus.PENDING,
-    daysRemaining: Math.floor(Math.random() * 14) + 1,
+    lastEvaluationDate: '۱۴۰۵/۰۳/۳۱', // End of current period
+    status: status,
+    daysRemaining: diffDays < 0 ? 0 : diffDays,
     authorizedRoles: authorizedRoles
   });
 

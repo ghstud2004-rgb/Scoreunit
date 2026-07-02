@@ -95,7 +95,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
             <div className="flex items-center gap-4 text-slate-400 font-bold">
               <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">person</span><span>{template.evaluateeName} ({template.evaluateeRole})</span></div>
               <span className="size-1 bg-slate-200 rounded-full"></span>
-              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">update</span><span>دوره اسفند ۱۴۰۳</span></div>
+              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-lg">update</span><span>دوره خرداد ۱۴۰۵</span></div>
             </div>
           </div>
 
@@ -158,7 +158,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ user, deptId, onBack, o
                 rows={4}
                 value={currentItem.feedback}
                 onChange={(e) => handleFeedbackChange(e.target.value)}
-                placeholder="توضیحات تکمیلی یا شواهد عینی عملکرد را در این بخش وارد کنید..."
+                placeholder="توضیحات تکمیلی عملکرد را در این بخش وارد کنید..."
                 className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50/50 p-6 text-slate-800 font-medium focus:border-blue-500 focus:bg-white transition-all outline-none resize-none shadow-inner"
               ></textarea>
             </div>
